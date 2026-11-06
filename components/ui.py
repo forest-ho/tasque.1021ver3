@@ -1,0 +1,205 @@
+from pathlib import Path
+
+import streamlit as st
+
+
+def inject_styles() -> None:
+    st.markdown(
+        """
+        <style>
+        :root {
+            color-scheme: dark;
+            --quest-ink: #f8f0d8;
+            --quest-panel: rgba(20, 28, 43, 0.94);
+            --quest-gold: #e5bd67;
+        }
+        html, body, [data-testid="stAppViewContainer"] {
+            background: #111827;
+            color: var(--quest-ink);
+        }
+        [data-testid="stHeader"],
+        [data-testid="stSidebar"],
+        [data-testid="collapsedControl"],
+        #MainMenu,
+        footer {
+            display: none !important;
+        }
+        [data-testid="stAppViewContainer"] > .main {
+            padding-top: 1rem;
+        }
+        .block-container {
+            max-width: 34rem;
+            padding: 1rem 1rem 2rem;
+        }
+        [data-testid="stVerticalBlock"] > [data-testid="stElementContainer"] {
+            width: 100%;
+        }
+        div.stButton > button,
+        div.stFormSubmitButton > button {
+            width: 100%;
+            min-height: 2.9rem;
+            border: 2px solid var(--quest-gold);
+            border-radius: 0.8rem;
+            background: linear-gradient(180deg, #405575, #26374f);
+            color: #fff8e7;
+            font-weight: 700;
+            box-shadow: 0 3px 0 #111827;
+        }
+        div.stButton > button:hover,
+        div.stFormSubmitButton > button:hover {
+            border-color: #ffe49a;
+            color: #fff;
+            background: #4b6386;
+        }
+        [data-testid="stMetric"] {
+            padding: 0.8rem;
+            border: 1px solid rgba(229, 189, 103, 0.65);
+            border-radius: 0.8rem;
+            background: var(--quest-panel);
+        }
+        [data-testid="stDialog"] {
+            max-width: min(92vw, 30rem);
+        }
+        [data-testid="stDialog"] > div {
+            background: #19263a;
+            border: 1px solid var(--quest-gold);
+        }
+        [data-testid="stDateInput"] input,
+        [data-testid="stTextInput"] input,
+        [data-testid="stTextArea"] textarea,
+        [data-testid="stSelectbox"] > div {
+            border-radius: 0.65rem;
+        }
+        [data-testid="stImage"] img {
+            max-width: 100%;
+            height: auto;
+        }
+        .quest-panel {
+            padding: 1rem;
+            border: 1px solid rgba(229, 189, 103, 0.65);
+            border-radius: 0.9rem;
+            background: var(--quest-panel);
+            margin: 0.5rem 0 1rem;
+        }
+        .quest-muted {
+            color: #d4d9e2;
+        }
+        .calendar-month-heading {
+            padding: 0.35rem 0;
+            color: var(--quest-ink);
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .calendar-weekday {
+            padding: 0.35rem 0;
+            color: var(--quest-gold);
+            font-weight: 700;
+            text-align: center;
+        }
+        .st-key-calendar_grid {
+            width: 100%;
+            max-width: 1080px;
+            margin-inline: auto;
+        }
+        .st-key-calendar_grid [data-testid="stHorizontalBlock"] {
+            width: 100%;
+            min-width: 0;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 0 !important;
+        }
+        .st-key-calendar_grid [data-testid="column"] {
+            min-width: 0 !important;
+            width: 14.285714% !important;
+            max-width: 14.285714% !important;
+            flex: 0 0 14.285714% !important;
+            box-sizing: border-box;
+        }
+        .calendar-empty-day {
+            width: 100%;
+            aspect-ratio: 1 / 2;
+            min-height: 2.9rem;
+        }
+        .st-key-calendar_grid div.stButton > button {
+            min-width: 0;
+            padding: 0;
+        }
+        .calendar-quest-list {
+            margin: 0.6rem 0 0;
+            padding-left: 1.4rem;
+        }
+        .calendar-quest-list li {
+            margin: 0.35rem 0;
+        }
+        .calendar-quest-completed {
+            color: #9ca3af;
+            text-decoration-line: line-through;
+            text-decoration-style: double;
+        }
+        [class*="st-key-calendar_day_"] div.stButton > button {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 2;
+            min-height: 2.7rem;
+            padding: 0;
+            border: 1px solid rgba(229, 189, 103, 0.25);
+            border-radius: 0.65rem;
+            background: rgba(20, 28, 43, 0.72);
+            box-shadow: none;
+        }
+        [class*="st-key-calendar_day_saturday_"] div.stButton > button {
+            color: #78b7ff;
+        }
+        [class*="st-key-calendar_day_sunday_"] div.stButton > button,
+        [class*="st-key-calendar_day_holiday_"] div.stButton > button {
+            color: #ff8585;
+        }
+        .st-key-calendar_grid [class*="_today_"] div.stButton > button {
+            border-color: rgba(232, 103, 113, 0.65);
+            background: rgba(232, 103, 113, 0.28);
+        }
+        [class*="st-key-calendar_day_"] div.stButton > button:hover,
+        .st-key-calendar_grid [class*="_today_"] div.stButton > button:hover {
+            border-color: var(--quest-gold);
+            background: rgba(229, 189, 103, 0.2);
+        }
+        @media (max-width: 640px) {
+            .block-container {
+                padding: 0.6rem 0.5rem 1.25rem;
+            }
+            h1 {
+                font-size: 1.8rem !important;
+            }
+            h2 {
+                font-size: 1.4rem !important;
+            }
+            .st-key-calendar_grid [data-testid="stHorizontalBlock"] > [data-testid="column"] {
+                box-sizing: border-box;
+                width: calc(100% / 7) !important;
+                max-width: calc(100% / 7) !important;
+                min-width: 0 !important;
+                flex: 0 0 calc(100% / 7) !important;
+            }
+            .calendar-weekday {
+                padding: 0.2rem 0;
+                font-size: 0.8rem;
+            }
+            .calendar-empty-day {
+                min-height: 0;
+            }
+            [class*="st-key-calendar_day_"] div.stButton > button {
+                min-height: 0;
+                font-size: 0.9rem;
+            }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def show_asset(path: Path, *, width: int = 380) -> None:
+    if not path.is_file():
+        raise FileNotFoundError(f"Required image asset not found: {path}")
+    st.image(str(path), width=width)
